@@ -34,6 +34,12 @@ class Database:
         self.cur.execute("UPDATE note SET title = '' WHERE id = entry")
         self.conn.commit()   
 
+    def delete(self, note_id):
+        self.conn = sqlite3.connect(str(self.db) + '.db')
+        self.cur = self.conn.cursor()
+        self.cur.execute("DELETE FROM note WHERE id = ?", (note_id,))
+        self.conn.commit()
+
 @dataclass
 class Note:
     id: int = None
