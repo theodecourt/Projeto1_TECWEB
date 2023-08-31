@@ -12,15 +12,11 @@ class Database:
                                             content TEXT NOT NULL);""")
         
     def add(self, note):
-        self.conn = sqlite3.connect(str(self.db) + '.db')
-        self.cur = self.conn.cursor()
         self.cur.execute("INSERT INTO note (title, content) VALUES (?, ?);", (note.title, note.content))   
         self.conn.commit()   
 
     def get_all(self):
         notas = []
-        self.conn = sqlite3.connect(str(self.db) + '.db')
-        self.cur = self.conn.cursor()
         self.cur.execute("SELECT id, title, content FROM note")
         for linha in self.cur:
             nota = Note(id=linha[0], title=linha[1], content=linha[2])
@@ -29,14 +25,11 @@ class Database:
         return(notas)
     
     def update(self, entry):
-        self.conn = sqlite3.connect(str(self.db) + '.db')
-        self.cur = self.conn.cursor()
-        self.cur.execute("UPDATE note SET title = '' WHERE id = entry")
+        self.conn.execute("UPDATE note SET titulo = (?) WHERE id = (?)", (entry.titulo, entry.id))
+        self.conn.execute("UPDATE note SET detalhes = (?) WHERE id = (?)", (entry.detalhes, entry.id))
         self.conn.commit()   
 
     def delete(self, note_id):
-        self.conn = sqlite3.connect(str(self.db) + '.db')
-        self.cur = self.conn.cursor()
         self.cur.execute("DELETE FROM note WHERE id = ?", (note_id,))
         self.conn.commit()
 

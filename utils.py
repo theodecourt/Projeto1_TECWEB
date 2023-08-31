@@ -1,4 +1,8 @@
 import json
+from database import Database
+from database import Note
+
+db = Database('banco')
 
 def extract_route(request):
     return request.split('\n')[0].split(" ")[1][1:]
@@ -8,9 +12,16 @@ def read_file(path):
     with open(path, "rb") as file:
         return file.read()
     
-def load_data(ar_json):
-    with open('data/' + ar_json, 'r') as arquivo:
-        return json.load(arquivo)
+def load_data(): #precisa pegar informações do
+    base = db.get_all()
+    base_arrumado = []
+    for note in base:
+        dic = {}
+        dic['titulo'] = note.title
+        dic['detalhes'] = note.content
+        base_arrumado.append(dic)
+
+    return base_arrumado
 
 def load_template(nome_arquivo):
     with open('templates/' + nome_arquivo, 'r') as arquivo:
@@ -18,23 +29,7 @@ def load_template(nome_arquivo):
 
 def adiciona_note(anotacao):
     try:
-        # Carregar o conteúdo existente do arquivo JSON
-        with open('data/notes.json', 'r') as file:
-            data = json.load(file)
-        
-        print(data)
-        # Criar um novo objeto com as chaves "titulo" e "detalhes"
-        nova_receita = {
-            "titulo": anotacao['titulo'],
-            "detalhes": anotacao['detalhes']
-        }
-        
-        # Adicionar o novo objeto à lista existente
-        data.append(nova_receita)
-        
-        # Escrever o conteúdo atualizado de volta ao arquivo JSON
-        with open('data/notes.json', 'w') as file:
-            json.dump(data, file, indent=4)
+        db.add(Note(title=anotacao['titulo'], content=anotacao['detalhes']))
         
     except Exception as e:
         print("Ocorreu um erro:", str(e))
