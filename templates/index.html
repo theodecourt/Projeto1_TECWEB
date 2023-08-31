@@ -25,14 +25,15 @@
 
     <main class="container">
       <!-- method="post" foi removido apenas para o exemplo funcionar sem o servidor -->
-      <form method="post">
+      <form method="post" class="form-card">
         <label for="titulo">Título</label>
-        <input id="titulo" type="text" name="titulo" />
+        <input id="titulo" type="text" name="titulo" class="autoresize"/>
         <label for="detalhes">Detalhes</label>
-        <input id="detalhes" name="detalhes" />
-        <input type="submit" />
+        <input id="detalhes" name="detalhes" class="autoresize"/>
+        <input type="submit" class="btn"/>
       </form>
-      <ul>
+
+      <ul class="card-container">
         {notes}
       </ul>
     </main>
